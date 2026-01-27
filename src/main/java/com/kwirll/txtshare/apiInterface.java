@@ -20,7 +20,7 @@ public class apiInterface {
 
     @GetMapping("/")
     public String home() {
-        return "Hi, wellcome to txtShare!";
+        return "<html><body><script>window.location.href='/index.html';</script></body></html>";
     }
 
     @GetMapping("/get/{key}")

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>txtShare</title>
+    <link rel="stylesheet" href="https://css.hackclub.com/theme.css" />
+    <link rel="stylesheet" href="style.css" />
+
+    <meta property="og:title" content="txtShare" />
+    <meta name="twitter:title" content="txtShare" />
+    <meta name="description" content="txtShare" />
+    <meta property="og:description" content="txtShare" />
+    <meta name="twitter:description" content="txtShare" />
+  </head>
+
+  <body>
+    <!-- Delete this HTML and replace with your own HTML -->
+    <a class="banner" target="_blank" href="https://hackclub.com/">
+      <img src="images/flag-orpheus-top.png" />
+    </a>
+
+
+    <div class="container blurb">
+      <p class="eyebrow">txtShare is a simple way to share text via web or shell.</p>
+    </div>
+
+    <div class="card container sunken">
+      <h2 class="headline">Push</h2>
+      <form id="pushForm">
+        <input type="text" name="key" id="pushKey" placeholder="Key" class="input" required>
+        <input type="text" name="text" id="pushText" placeholder="Hello World" class="input" required>
+        <input type="password" id="pushPass" name="pass" placeholder="(Optional) Password" class="input">
+        <button type="submit">Push</button>
+      </form>
+      <p id="pushResult"></p>
+      <h2 class="headline">Get</h2>
+      <form id="getForm">
+        <input type="text" name="key" id="getKey" placeholder="Key" class="input" required>
+        <input type="password" id="getPass" name="pass" placeholder="(Optional) Password" class="input">
+        <button type="submit">Get</button>
+      </form>
+      <p id="getResult"></p>
+
+    </div>
+
+    <div class="card container">
+      <h2 class="headline">Use in your PowerShell/Terminal</h2>
+      <b>Connect:</b>
+      <p><strong>Windows (PowerShell):</strong></p>
+      <pre id="psCommand">irm "http://HOSTNAME/setup" | iex</pre>
+
+      <p><strong>Linux / macOS:</strong></p>
+      <pre id="bashCommand">. <(curl -s http://HOSTNAME/setup)</pre>
+      <br>
+      <b>Use:</b>
+      <ul>
+        <li>
+          <strong>Push data:</strong><br>
+          <code>txtPush &lt;Key&gt; "&lt;Inhalt&gt;"</code><br>
+          <small>Example: <code>txtPush note "Buy milk"</code></small>
+        </li>
+        <li>
+          <strong>Push password protected:</strong><br>
+          <code>txtPush &lt;Key&gt; "&lt;Inhalt&gt;" "&lt;Password&gt;"</code><br>
+          <small>Example: <code>txtPush secret "Secred" "topsecret123"</code></small>
+        </li>
+        <li>
+          <strong>Get data:</strong><br>
+          <code>txtGet &lt;Key&gt;</code><br>
+          <small>or with password: <code>txtGet &lt;Key&gt; "&lt;Password&gt;"</code></small>
+        </li>
+        <li>
+          <strong>Get help:</strong><br>
+          <code>txtHelp</code>
+        </li>
+      </ul>
+    </div>
+    <div class="container">
+      <p>©Noah Schleder 2026  |  Made with ♥️ for HackClub Flavortown  |  Github: <a href="https://github.com/Noah20102021/txtShare">https://github.com/Noah20102021/txtShare</a></p>
+    </div>
+    </body>
+
+  <script src="script.js"></script>
+</html>
