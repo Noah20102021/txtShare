@@ -8,7 +8,7 @@ public class functions {
 
     static HashMap<String, txtClass> txtMap = new HashMap<String, txtClass>();
 
-    public static Boolean push(String key, String value) {
+    public static Boolean push(String key, String value, String pass) {
         if (txtMap.containsKey(key)){
             txtClass temp = txtMap.get(key);
             if (temp.getExpires().after(new Date())) {
@@ -17,15 +17,22 @@ public class functions {
                 txtMap.remove(key);
             }
         }
-        txtMap.put(key, new txtClass(key, value, new Date(System.currentTimeMillis() + 5000 * 60), ""));
+        txtMap.put(key, new txtClass(key, value, new Date(System.currentTimeMillis() + 5000 * 60), pass));
         return true;
     }
 
-    public static String get(String key) {
+    public static String get(String key, String pass) {
         txtClass temp = txtMap.get(key);
         if (temp == null) return null;
-        if (!Objects.equals(temp.getPass(), "")) return null;
-        return temp.getValue();
+        if (!Objects.equals(temp.getPass(), "")) {
+            if (Objects.equals(temp.getPass(), pass)){
+                return temp.getValue();
+            }else {
+                return null;
+            }
+        }else {
+            return temp.getValue();
+        }
     }
 
 }

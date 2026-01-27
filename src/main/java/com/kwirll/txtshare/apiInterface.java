@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 public class apiInterface {
 
     @GetMapping("/push/{key}")
-    public String push(@PathVariable("key") String key, @RequestParam("value") String value) {
-        if (functions.push(key,value)) {
-            return "Your string is now available at domain.com/get/"+key+" and will remain accessible for at least the next 5 minutes.";
+    public String push(@PathVariable("key") String key, @RequestParam("value") String value, @RequestParam(value = "", required = false) String password) {
+        if (functions.push(key,value,password)) {
+            return "Your string is now available at "+config.host+"/get/"+key+" and will remain accessible for at least the next 5 minutes.";
 
         }else {
             return "Failed! Please Try another key or at another moment.";
@@ -24,8 +24,8 @@ public class apiInterface {
     }
 
     @GetMapping("/get/{key}")
-    public String get(@PathVariable("key") String key) {
-        String value = functions.get(key);
+    public String get(@PathVariable("key") String key, @RequestParam(value = "password", required = false) String password) {
+        String value = functions.get(key, password);
         if (value != null) {
             return value;
         }else {
@@ -36,18 +36,33 @@ public class apiInterface {
     @GetMapping(value = "/setup", produces = MediaType.TEXT_PLAIN_VALUE)
     public String getSetup(@RequestHeader("User-Agent") String userAgent) {
         if (userAgent.contains("PowerShell")) {
-            // Hier wurden $($k) und $($t) sowie die Anführungszeichen optimiert
-            return "function txtPush($k,$t){ " +
-                    "$v = [uri]::EscapeDataString($t); " +
-                    "curl.exe -s \"http://localhost:8080/push/$($k)?value=$v\" }; " +
-                    "function txtGet($k){ curl.exe -s \"http://localhost:8080/get/$($k)\" }; " +
-                    "Write-Host '✅ txtshare (Windows) Ready! use txtPush KEY VALUE & txtGet KEY' -Fore Green";
+
+            return "function txtPush($k,$t,$p){ " +
+                    "  $u=\"http://kwirll.ddnss.de:8080/push/$($k)?value=$([uri]::EscapeDataString($t))\"; " +
+                    "  if($p){$u+=\"&password=$([uri]::EscapeDataString($p))\"}; curl.exe -s $u; echo \"\" }; " +
+                    "function txtGet($k,$p){ " +
+                    "  $u=\"http://kwirll.ddnss.de:8080/get/$($k)\"; " +
+                    "  if($p){$u+=\"?password=$([uri]::EscapeDataString($p))\"}; curl.exe -s $u; echo \"\" }; " +
+                    "function txtHelp(){ " +
+                    "  Write-Host '--- txtshare Help ---' -Fore Cyan; " +
+                    "  Write-Host 'txtPush <key> '<text>' [password]  -> Save text'; " +
+                    "  Write-Host 'txtGet  <key> [password]         -> Retrieve text'; " +
+                    "  Write-Host 'txtHelp                          -> Show this help' }; " +
+                    "Write-Host '--txtshare (Windows/PowerShell) Ready!-- \n use txtHelp for help'";
         } else {
-            // Linux/Mac Version (Python-Teil korrigiert für Query-Params)
-            return "txtPush() { local e=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$2'))\"); " +
-                    "curl -s \"http://localhost:8080/push/$1?value=$e\"; }; " +
-                    "txtGet() { curl -s \"http://localhost:8080/get/$1\"; }; " +
-                    "echo '✅ txtshare (Linux/Mac) Ready! use txtPush KEY VALUE & txtGet KEY'";
+
+            return "txtPush() { local v=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$2'))\"); " +
+                    "local u=\"http://kwirll.ddnss.de:8080/push/$1?value=$v\"; " +
+                    "[ ! -z \"$3\" ] && u=\"$u&password=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$3'))\")\"; " +
+                    "curl -s \"$u\"; echo; }; " +
+                    "txtGet() { local u=\"http://kwirll.ddnss.de:8080/get/$1\"; " +
+                    "[ ! -z \"$2\" ] && u=\"$u?password=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$2'))\")\"; " +
+                    "curl -s \"$u\"; echo; }; " +
+                    "txtHelp() { echo -e '\\033[0;36m--- txtshare Help ---\\033[0m'; " +
+                    "echo 'txtPush <key> '<text>' [password]  -> Save text'; " +
+                    "echo 'txtGet  <key> [password]         -> Retrieve text'; " +
+                    "echo 'txtHelp                          -> Show this help'; }; " +
+                    "echo '--txtshare (Linux/Mac) Ready!-- \n use txtHelp for help'";
         }
     }
 
