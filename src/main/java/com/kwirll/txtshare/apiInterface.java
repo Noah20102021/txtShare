@@ -38,10 +38,10 @@ public class apiInterface {
         if (userAgent.contains("PowerShell")) {
 
             return "function txtPush($k,$t,$p){ " +
-                    "  $u=\"http://kwirll.ddnss.de:8080/push/$($k)?value=$([uri]::EscapeDataString($t))\"; " +
+                    "  $u=\""+config.host+"/push/$($k)?value=$([uri]::EscapeDataString($t))\"; " +
                     "  if($p){$u+=\"&password=$([uri]::EscapeDataString($p))\"}; curl.exe -s $u; echo \"\" }; " +
                     "function txtGet($k,$p){ " +
-                    "  $u=\"http://kwirll.ddnss.de:8080/get/$($k)\"; " +
+                    "  $u=\""+config.host+"/get/$($k)\"; " +
                     "  if($p){$u+=\"?password=$([uri]::EscapeDataString($p))\"}; curl.exe -s $u; echo \"\" }; " +
                     "function txtHelp(){ " +
                     "  Write-Host '--- txtshare Help ---' -Fore Cyan; " +
@@ -52,10 +52,10 @@ public class apiInterface {
         } else {
 
             return "txtPush() { local v=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$2'))\"); " +
-                    "local u=\"http://kwirll.ddnss.de:8080/push/$1?value=$v\"; " +
+                    "local u=\""+config.host+"/push/$1?value=$v\"; " +
                     "[ ! -z \"$3\" ] && u=\"$u&password=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$3'))\")\"; " +
                     "curl -s \"$u\"; echo; }; " +
-                    "txtGet() { local u=\"http://kwirll.ddnss.de:8080/get/$1\"; " +
+                    "txtGet() { local u=\""+config.host+"/get/$1\"; " +
                     "[ ! -z \"$2\" ] && u=\"$u?password=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$2'))\")\"; " +
                     "curl -s \"$u\"; echo; }; " +
                     "txtHelp() { echo -e '\\033[0;36m--- txtshare Help ---\\033[0m'; " +
