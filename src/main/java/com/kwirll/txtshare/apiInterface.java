@@ -50,8 +50,8 @@ public class apiInterface {
                     "  if($p){$u+=\"?password=$([uri]::EscapeDataString($p))\"}; curl.exe -s $u; echo \"\" }; " +
                     "function txtHelp(){ " +
                     "  Write-Host '--- txtshare Help ---' -Fore Cyan; " +
-                    "  Write-Host 'txtPush <key> '<text>' [password]  -> Save text'; " +
-                    "  Write-Host 'txtGet  <key> [password]         -> Retrieve text'; " +
+                    "  Write-Host 'txtPush {key} \"{text}\" \"[password]\"  -> Save text'; " +
+                    "  Write-Host 'txtGet  {key} \"[password]\"         -> Retrieve text'; " +
                     "  Write-Host 'txtHelp                          -> Show this help' }; " +
                     "Write-Host '--txtshare (Windows/PowerShell) Ready!-- \n use txtHelp for help'";
         } else {
@@ -64,8 +64,8 @@ public class apiInterface {
                     "[ ! -z \"$2\" ] && u=\"$u?password=$(python3 -c \"import urllib.parse; print(urllib.parse.quote_plus('$2'))\")\"; " +
                     "curl -s \"$u\"; echo; }; " +
                     "txtHelp() { echo -e '\\033[0;36m--- txtshare Help ---\\033[0m'; " +
-                    "echo 'txtPush <key> '<text>' [password]  -> Save text'; " +
-                    "echo 'txtGet  <key> [password]         -> Retrieve text'; " +
+                    "echo 'txtPush <key> \"<text>\" \"[password]\"  -> Save text'; " +
+                    "echo 'txtGet  <key> \"[password]\"         -> Retrieve text'; " +
                     "echo 'txtHelp                          -> Show this help'; }; " +
                     "echo '--txtshare (Linux/Mac) Ready!-- \n use txtHelp for help'";
         }
