@@ -33,6 +33,11 @@ public class apiInterface {
         }
     }
 
+    @GetMapping("/config")
+    public String getConfig() {
+        return config.host;
+    }
+
     @GetMapping(value = "/setup", produces = MediaType.TEXT_PLAIN_VALUE)
     public String getSetup(@RequestHeader("User-Agent") String userAgent) {
         if (userAgent.contains("PowerShell")) {

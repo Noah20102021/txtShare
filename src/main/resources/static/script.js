@@ -1,6 +1,16 @@
 window.addEventListener("DOMContentLoaded", (event) => {
 
 });
+let host = "";
+fetch("/config")
+    .then(response => response.text())
+    .then(data => {
+        host = data;
+        document.getElementById("psCommand").innerText = `irm "${host}/setup" | iex`;
+        document.getElementById("bashCommand").innerText = `. <(curl -s ${host}/setup)`;
+    });
+
+
 
 
 async function callApi(url, displayElementId) {
